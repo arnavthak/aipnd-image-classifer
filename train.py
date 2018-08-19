@@ -124,7 +124,7 @@ def main():
                                   ('output', nn.LogSoftmax(dim=1))]))
 
 
-    if args.arch == "vgg16":
+    elif args.arch == "vgg16":
         feature_num = model.classifier[0].in_features
         classifier = nn.Sequential(OrderedDict([
                                   ('fc1', nn.Linear(feature_num, 1024)),
