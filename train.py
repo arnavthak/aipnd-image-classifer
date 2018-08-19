@@ -23,7 +23,7 @@ from utils import save_checkpoint, load_checkpoint
 def parse_args():
     parser = argparse.ArgumentParser(description="Training process")
     parser.add_argument('--data_dir', action='store')
-    parser.add_argument('--arch', dest='arch', default='vgg19', choices=['vgg13', 'vgg19'])
+    parser.add_argument('--arch', dest='arch', default='vgg16', choices=['vgg13', 'vgg16', 'vgg19'])
     parser.add_argument('--learning_rate', dest='learning_rate', default='0.01')
     parser.add_argument('--hidden_units', dest='hidden_units', default='512')
     parser.add_argument('--epochs', dest='epochs', default='8')
@@ -122,6 +122,18 @@ def main():
                                   ('relu', nn.ReLU()),
                                   ('fc2', nn.Linear(1024, 102)),
                                   ('output', nn.LogSoftmax(dim=1))]))
+
+
+    if args.arch == "vgg16":
+        feature_num = model.classifier[0].in_features
+        classifier = nn.Sequential(OrderedDict([
+                                  ('fc1', nn.Linear(feature_num, 1024)),
+                                  ('drop', nn.Dropout(p=0.5)),
+                                  ('relu', nn.ReLU()),
+                                  ('fc2', nn.Linear(1024, 102)),
+                                  ('output', nn.LogSoftmax(dim=1))]))
+	
+	
     elif args.arch == "vgg19":
         feature_num = model.classifier[0].in_features
         classifier = nn.Sequential(OrderedDict([
